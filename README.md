@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Meorphis Test 2 Vbs6wj REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found [on docs.meorphis-test-2-vbs6wj.com](https://docs.meorphis-test-2-vbs6wj.com). The full API of this library can be found in [api.md](https://www.github.com/meorphis-test-2-vbs6wj/meorphis-test-2-vbs6wj-node/blob/main/api.md).
+The REST API documentation can be found [on docs.meorphis-test-2-vbs6wj.com](https://docs.meorphis-test-2-vbs6wj.com). The full API of this library can be found in [api.md](https://www.github.com/meorphis-test/test-repo-3/blob/main/api.md).
 
 ## Installation
 
@@ -16,7 +16,7 @@ yarn add meorphis-test-2-vbs6wj
 
 ## Usage
 
-The full API of this library can be found in [api.md](https://www.github.com/meorphis-test-2-vbs6wj/meorphis-test-2-vbs6wj-node/blob/main/api.md).
+The full API of this library can be found in [api.md](https://www.github.com/meorphis-test/test-repo-3/blob/main/api.md).
 
 <!-- prettier-ignore -->
 ```js
@@ -170,7 +170,7 @@ import MeorphisTest2Vbs6wj from 'meorphis-test-2-vbs6wj';
 ```
 
 To do the inverse, add `import "meorphis-test-2-vbs6wj/shims/node"` (which does import polyfills).
-This can also be useful if you are getting the wrong TypeScript types for `Response` - more details [here](https://github.com/meorphis-test-2-vbs6wj/tree/main/src/_shims#readme).
+This can also be useful if you are getting the wrong TypeScript types for `Response` - more details [here](https://github.com/meorphis-test/test-repo-3/tree/main/src/_shims#readme).
 
 You may also provide a custom `fetch` function when instantiating the client,
 which can be used to inspect or alter the `Request` or `Response` before/after each request:
@@ -225,7 +225,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/meorphis-test-2-vbs6wj/meorphis-test-2-vbs6wj-node/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/meorphis-test/test-repo-3/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

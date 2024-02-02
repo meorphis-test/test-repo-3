@@ -79,7 +79,7 @@ export function getDefaultAgent(url: string) {
 }
 export function fileFromPath() {
   throw new Error(
-    'The `fileFromPath` function is only supported in Node. See the README for more details: https://www.github.com/meorphis-test-2-vbs6wj/meorphis-test-2-vbs6wj-node#file-uploads',
+    'The `fileFromPath` function is only supported in Node. See the README for more details: https://www.github.com/meorphis-test/test-repo-3#file-uploads',
   );
 }
 
