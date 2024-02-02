@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Meorphis Test 2 Vbs6wj REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found [on docs.meorphis-test-2-vbs6wj.com](https://docs.meorphis-test-2-vbs6wj.com). The full API of this library can be found in [api.md](https://www.github.com/meorphis-test/test-repo-3/blob/main/api.md).
+The REST API documentation can be found [on docs.meorphis-test-2-vbs6wj.com](https://docs.meorphis-test-2-vbs6wj.com). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -16,7 +16,7 @@ yarn add meorphis-test-2-vbs6wj
 
 ## Usage
 
-The full API of this library can be found in [api.md](https://www.github.com/meorphis-test/test-repo-3/blob/main/api.md).
+The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
