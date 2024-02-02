@@ -1,6 +1,6 @@
 {
   "name": "meorphis-test-2-vbs6wj",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The official TypeScript library for the Meorphis Test 2 Vbs6wj API",
   "author": "Meorphis Test 2 Vbs6wj <dev-feedback@meorphis-test-2-vbs6wj.com>",
   "types": "dist/index.d.ts",
