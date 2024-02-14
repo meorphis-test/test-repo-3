@@ -2,7 +2,7 @@
  * Disclaimer: modules in _shims aren't intended to be imported by SDK users.
  */
 import { manual } from './manual-types';
-import * as auto from 'meorphis-test-2-vbs6wj/_shims/auto/types';
+import * as auto from 'meorphis-test-3-hp2m8u/_shims/auto/types';
 import { type RequestOptions } from '../core';
 
 type SelectType<Manual, Auto> = unknown extends Manual ? Auto : Manual;

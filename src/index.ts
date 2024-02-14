@@ -4,13 +4,33 @@ import * as Core from './core';
 import * as Errors from './error';
 import { type Agent } from './_shims/index';
 import * as Uploads from './uploads';
-import * as API from 'meorphis-test-2-vbs6wj/resources/index';
+import * as API from 'meorphis-test-3-hp2m8u/resources/index';
+
+const environments = {
+  production: 'https://api.acme.com/v1',
+  environment_1: 'https://sandbox.acme.com/v1',
+};
+type Environment = keyof typeof environments;
 
 export interface ClientOptions {
   /**
+   * Defaults to process.env['MEORPHIS_TEST_3_HP2M8U_API_KEY'].
+   */
+  apiKey?: string | undefined;
+
+  /**
+   * Specifies the environment to use for the API.
+   *
+   * Each environment maps to a different base URL:
+   * - `production` corresponds to `https://api.acme.com/v1`
+   * - `environment_1` corresponds to `https://sandbox.acme.com/v1`
+   */
+  environment?: Environment;
+
+  /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['MEORPHIS_TEST_2_VBS6WJ_BASE_URL'].
+   * Defaults to process.env['MEORPHIS_TEST_3_HP2M8U_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -64,14 +84,18 @@ export interface ClientOptions {
   defaultQuery?: Core.DefaultQuery;
 }
 
-/** API Client for interfacing with the Meorphis Test 2 Vbs6wj API. */
-export class MeorphisTest2Vbs6wj extends Core.APIClient {
+/** API Client for interfacing with the Meorphis Test 3 Hp2m8u API. */
+export class MeorphisTest3Hp2m8u extends Core.APIClient {
+  apiKey: string;
+
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Meorphis Test 2 Vbs6wj API.
+   * API Client for interfacing with the Meorphis Test 3 Hp2m8u API.
    *
-   * @param {string} [opts.baseURL=process.env['MEORPHIS_TEST_2_VBS6WJ_BASE_URL'] ?? https://gentrace.ai/api/v1] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['MEORPHIS_TEST_3_HP2M8U_API_KEY'] ?? undefined]
+   * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
+   * @param {string} [opts.baseURL=process.env['MEORPHIS_TEST_3_HP2M8U_BASE_URL'] ?? https://api.acme.com/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
    * @param {Core.Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -79,28 +103,45 @@ export class MeorphisTest2Vbs6wj extends Core.APIClient {
    * @param {Core.Headers} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
-  constructor({ baseURL = Core.readEnv('MEORPHIS_TEST_2_VBS6WJ_BASE_URL'), ...opts }: ClientOptions = {}) {
+  constructor({
+    baseURL = Core.readEnv('MEORPHIS_TEST_3_HP2M8U_BASE_URL'),
+    apiKey = Core.readEnv('MEORPHIS_TEST_3_HP2M8U_API_KEY'),
+    ...opts
+  }: ClientOptions = {}) {
+    if (apiKey === undefined) {
+      throw new Errors.MeorphisTest3Hp2m8uError(
+        "The MEORPHIS_TEST_3_HP2M8U_API_KEY environment variable is missing or empty; either provide it, or instantiate the MeorphisTest3Hp2m8u client with an apiKey option, like new MeorphisTest3Hp2m8u({ apiKey: 'My API Key' }).",
+      );
+    }
+
     const options: ClientOptions = {
+      apiKey,
       ...opts,
-      baseURL: baseURL || `https://gentrace.ai/api/v1`,
+      baseURL,
+      environment: opts.environment ?? 'production',
     };
 
+    if (baseURL && opts.environment) {
+      throw new Errors.MeorphisTest3Hp2m8uError(
+        'Ambiguous URL; The `baseURL` option (or MEORPHIS_TEST_3_HP2M8U_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      );
+    }
+
     super({
-      baseURL: options.baseURL!,
+      baseURL: options.baseURL || environments[options.environment || 'production'],
       timeout: options.timeout ?? 60000 /* 1 minute */,
       httpAgent: options.httpAgent,
       maxRetries: options.maxRetries,
       fetch: options.fetch,
     });
     this._options = options;
+
+    this.apiKey = apiKey;
   }
 
-  runs: API.Runs = new API.Runs(this);
-  feedbacks: API.Feedbacks = new API.Feedbacks(this);
-  testCases: API.TestCases = new API.TestCases(this);
-  testResults: API.TestResults = new API.TestResults(this);
-  testRuns: API.TestRuns = new API.TestRuns(this);
-  pipelines: API.Pipelines = new API.Pipelines(this);
+  accounts: API.Accounts = new API.Accounts(this);
+  cards: API.Cards = new API.Cards(this);
+  status: API.Status = new API.Status(this);
 
   protected override defaultQuery(): Core.DefaultQuery | undefined {
     return this._options.defaultQuery;
@@ -113,9 +154,13 @@ export class MeorphisTest2Vbs6wj extends Core.APIClient {
     };
   }
 
-  static MeorphisTest2Vbs6wj = this;
+  protected override authHeaders(opts: Core.FinalRequestOptions): Core.Headers {
+    return { Authorization: this.apiKey };
+  }
 
-  static MeorphisTest2Vbs6wjError = Errors.MeorphisTest2Vbs6wjError;
+  static MeorphisTest3Hp2m8u = this;
+
+  static MeorphisTest3Hp2m8uError = Errors.MeorphisTest3Hp2m8uError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -131,7 +176,7 @@ export class MeorphisTest2Vbs6wj extends Core.APIClient {
 }
 
 export const {
-  MeorphisTest2Vbs6wjError,
+  MeorphisTest3Hp2m8uError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,
@@ -149,42 +194,27 @@ export const {
 export import toFile = Uploads.toFile;
 export import fileFromPath = Uploads.fileFromPath;
 
-export namespace MeorphisTest2Vbs6wj {
+export namespace MeorphisTest3Hp2m8u {
   // Helper functions
   export import toFile = Uploads.toFile;
   export import fileFromPath = Uploads.fileFromPath;
 
   export import RequestOptions = Core.RequestOptions;
 
-  export import Runs = API.Runs;
-  export import RunCreateResponse = API.RunCreateResponse;
-  export import RunCreateParams = API.RunCreateParams;
+  export import Accounts = API.Accounts;
+  export import AccountConfiguration = API.AccountConfiguration;
+  export import AccountUpdateParams = API.AccountUpdateParams;
 
-  export import Feedbacks = API.Feedbacks;
-  export import FeedbackCreateResponse = API.FeedbackCreateResponse;
-  export import FeedbackCreateParams = API.FeedbackCreateParams;
+  export import Cards = API.Cards;
+  export import Card = API.Card;
+  export import FinancialTransaction = API.FinancialTransaction;
+  export import CardProvisionResponse = API.CardProvisionResponse;
+  export import CardCreateParams = API.CardCreateParams;
+  export import CardUpdateParams = API.CardUpdateParams;
+  export import CardProvisionParams = API.CardProvisionParams;
 
-  export import TestCases = API.TestCases;
-  export import TestCaseRetrieveResponse = API.TestCaseRetrieveResponse;
-  export import TestCaseRetrieveParams = API.TestCaseRetrieveParams;
-
-  export import TestResults = API.TestResults;
-  export import TestResult = API.TestResult;
-  export import TestResultCreateResponse = API.TestResultCreateResponse;
-  export import TestResultRetrieveResponse = API.TestResultRetrieveResponse;
-  export import TestResultCreateParams = API.TestResultCreateParams;
-  export import TestResultRetrieveParams = API.TestResultRetrieveParams;
-
-  export import TestRuns = API.TestRuns;
-  export import TestRun = API.TestRun;
-  export import TestRunCreateResponse = API.TestRunCreateResponse;
-  export import TestRunRetrieveResponse = API.TestRunRetrieveResponse;
-  export import TestRunCreateParams = API.TestRunCreateParams;
-  export import TestRunRetrieveParams = API.TestRunRetrieveParams;
-
-  export import Pipelines = API.Pipelines;
-  export import PipelineListResponse = API.PipelineListResponse;
-  export import PipelineListParams = API.PipelineListParams;
+  export import Status = API.Status;
+  export import StatusRetrieveResponse = API.StatusRetrieveResponse;
 }
 
-export default MeorphisTest2Vbs6wj;
+export default MeorphisTest3Hp2m8u;

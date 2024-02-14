@@ -1,15 +1,19 @@
 // File generated from our OpenAPI spec by Stainless.
 
-import MeorphisTest2Vbs6wj from 'meorphis-test-2-vbs6wj';
+import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
 import { Response } from 'node-fetch';
 
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj({
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
+  apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource testCases', () => {
+describe('resource financialTransactions', () => {
   test('retrieve', async () => {
-    const responsePromise = meorphisTest2Vbs6wj.testCases.retrieve();
+    const responsePromise = meorphisTest3Hp2m8u.cards.financialTransactions.retrieve(
+      '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,17 +26,11 @@ describe('resource testCases', () => {
   test('retrieve: request options instead of params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      meorphisTest2Vbs6wj.testCases.retrieve({ path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(MeorphisTest2Vbs6wj.NotFoundError);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      meorphisTest2Vbs6wj.testCases.retrieve(
-        { pipelineId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', pipelineSlug: 'string' },
+      meorphisTest3Hp2m8u.cards.financialTransactions.retrieve(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(MeorphisTest2Vbs6wj.NotFoundError);
+    ).rejects.toThrow(MeorphisTest3Hp2m8u.NotFoundError);
   });
 });
