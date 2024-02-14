@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-export { AccountConfiguration, AccountUpdateParams, Accounts } from './accounts/accounts';
 export {
   Card,
   FinancialTransaction,
@@ -9,5 +8,5 @@ export {
   CardUpdateParams,
   CardProvisionParams,
   Cards,
-} from './cards/cards';
-export { StatusRetrieveResponse, Status } from './status';
+} from './cards';
+export { FinancialTransactions } from './financial-transactions';
