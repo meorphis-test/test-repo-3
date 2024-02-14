@@ -1,6 +1,6 @@
 import { VERSION } from './version';
 import {
-  MeorphisTest2Vbs6wjError,
+  MeorphisTest3Hp2m8uError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,
@@ -48,7 +48,9 @@ async function defaultParseResponse<T>(props: APIResponseProps): Promise<T> {
   }
 
   const contentType = response.headers.get('content-type');
-  if (contentType?.includes('application/json')) {
+  const isJSON =
+    contentType?.includes('application/json') || contentType?.includes('application/vnd.api+json');
+  if (isJSON) {
     const json = await response.json();
 
     debug('response', response.status, response.url, response.headers, json);
@@ -95,9 +97,9 @@ export class APIPromise<T> extends Promise<T> {
    *
    * 👋 Getting the wrong TypeScript type for `Response`?
    * Try setting `"moduleResolution": "NodeNext"` if you can,
-   * or add one of these imports before your first `import … from 'meorphis-test-2-vbs6wj'`:
-   * - `import 'meorphis-test-2-vbs6wj/shims/node'` (if you're running on Node)
-   * - `import 'meorphis-test-2-vbs6wj/shims/web'` (otherwise)
+   * or add one of these imports before your first `import … from 'meorphis-test-3-hp2m8u'`:
+   * - `import 'meorphis-test-3-hp2m8u/shims/node'` (if you're running on Node)
+   * - `import 'meorphis-test-3-hp2m8u/shims/web'` (otherwise)
    */
   asResponse(): Promise<Response> {
     return this.responsePromise.then((p) => p.response);
@@ -111,9 +113,9 @@ export class APIPromise<T> extends Promise<T> {
    *
    * 👋 Getting the wrong TypeScript type for `Response`?
    * Try setting `"moduleResolution": "NodeNext"` if you can,
-   * or add one of these imports before your first `import … from 'meorphis-test-2-vbs6wj'`:
-   * - `import 'meorphis-test-2-vbs6wj/shims/node'` (if you're running on Node)
-   * - `import 'meorphis-test-2-vbs6wj/shims/web'` (otherwise)
+   * or add one of these imports before your first `import … from 'meorphis-test-3-hp2m8u'`:
+   * - `import 'meorphis-test-3-hp2m8u/shims/node'` (if you're running on Node)
+   * - `import 'meorphis-test-3-hp2m8u/shims/web'` (otherwise)
    */
   async withResponse(): Promise<{ data: T; response: Response }> {
     const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
@@ -470,7 +472,7 @@ export abstract class APIClient {
         if (value === null) {
           return `${encodeURIComponent(key)}=`;
         }
-        throw new MeorphisTest2Vbs6wjError(
+        throw new MeorphisTest3Hp2m8uError(
           `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
         );
       })
@@ -616,7 +618,7 @@ export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
   async getNextPage(): Promise<this> {
     const nextInfo = this.nextPageInfo();
     if (!nextInfo) {
-      throw new MeorphisTest2Vbs6wjError(
+      throw new MeorphisTest3Hp2m8uError(
         'No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.',
       );
     }
@@ -946,10 +948,10 @@ export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve
 
 const validatePositiveInteger = (name: string, n: unknown): number => {
   if (typeof n !== 'number' || !Number.isInteger(n)) {
-    throw new MeorphisTest2Vbs6wjError(`${name} must be an integer`);
+    throw new MeorphisTest3Hp2m8uError(`${name} must be an integer`);
   }
   if (n < 0) {
-    throw new MeorphisTest2Vbs6wjError(`${name} must be a positive integer`);
+    throw new MeorphisTest3Hp2m8uError(`${name} must be a positive integer`);
   }
   return n;
 };
@@ -961,7 +963,7 @@ export const castToError = (err: any): Error => {
 
 export const ensurePresent = <T>(value: T | null | undefined): T => {
   if (value == null)
-    throw new MeorphisTest2Vbs6wjError(`Expected a value to be given but received ${value} instead.`);
+    throw new MeorphisTest3Hp2m8uError(`Expected a value to be given but received ${value} instead.`);
   return value;
 };
 
@@ -986,14 +988,14 @@ export const coerceInteger = (value: unknown): number => {
   if (typeof value === 'number') return Math.round(value);
   if (typeof value === 'string') return parseInt(value, 10);
 
-  throw new MeorphisTest2Vbs6wjError(`Could not coerce ${value} (type: ${typeof value}) into a number`);
+  throw new MeorphisTest3Hp2m8uError(`Could not coerce ${value} (type: ${typeof value}) into a number`);
 };
 
 export const coerceFloat = (value: unknown): number => {
   if (typeof value === 'number') return value;
   if (typeof value === 'string') return parseFloat(value);
 
-  throw new MeorphisTest2Vbs6wjError(`Could not coerce ${value} (type: ${typeof value}) into a number`);
+  throw new MeorphisTest3Hp2m8uError(`Could not coerce ${value} (type: ${typeof value}) into a number`);
 };
 
 export const coerceBoolean = (value: unknown): boolean => {
@@ -1059,7 +1061,7 @@ function applyHeadersMut(targetHeaders: Headers, newHeaders: Headers): void {
 
 export function debug(action: string, ...args: any[]) {
   if (typeof process !== 'undefined' && process.env['DEBUG'] === 'true') {
-    console.log(`MeorphisTest2Vbs6wj:DEBUG:${action}`, ...args);
+    console.log(`MeorphisTest3Hp2m8u:DEBUG:${action}`, ...args);
   }
 }
 
@@ -1136,7 +1138,7 @@ export const toBase64 = (str: string | null | undefined): string => {
     return btoa(str);
   }
 
-  throw new MeorphisTest2Vbs6wjError('Cannot generate b64 string; Expected `Buffer` or `btoa` to be defined');
+  throw new MeorphisTest3Hp2m8uError('Cannot generate b64 string; Expected `Buffer` or `btoa` to be defined');
 };
 
 export function isObj(obj: unknown): obj is Record<string, unknown> {

@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "meorphis-test-2-vbs6wj/*": ["dist/src/*"],
-      "meorphis-test-2-vbs6wj": ["dist/src/index.ts"],
+      "meorphis-test-3-hp2m8u/*": ["dist/src/*"],
+      "meorphis-test-3-hp2m8u": ["dist/src/index.ts"],
       "digest-fetch": ["./typings/digest-fetch"]
     },
     "noEmit": false,
