@@ -1,33 +1,36 @@
-# Meorphis Test 2 Vbs6wj Node API Library
+# Meorphis Test 3 Hp2m8u Node API Library
 
-[![NPM version](https://img.shields.io/npm/v/meorphis-test-2-vbs6wj.svg)](https://npmjs.org/package/meorphis-test-2-vbs6wj)
+[![NPM version](https://img.shields.io/npm/v/meorphis-test-3-hp2m8u.svg)](https://npmjs.org/package/meorphis-test-3-hp2m8u)
 
-This library provides convenient access to the Meorphis Test 2 Vbs6wj REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Meorphis Test 3 Hp2m8u REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found [on docs.meorphis-test-2-vbs6wj.com](https://docs.meorphis-test-2-vbs6wj.com). The full API of this library can be found in [api.md](https://www.github.com/meorphis-test/test-repo-3/blob/main/api.md).
+The REST API documentation can be found [on docs.meorphis-test-3-hp2m8u.com](https://docs.meorphis-test-3-hp2m8u.com). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
 ```sh
-npm install --save meorphis-test-2-vbs6wj
+npm install --save meorphis-test-3-hp2m8u
 # or
-yarn add meorphis-test-2-vbs6wj
+yarn add meorphis-test-3-hp2m8u
 ```
 
 ## Usage
 
-The full API of this library can be found in [api.md](https://www.github.com/meorphis-test/test-repo-3/blob/main/api.md).
+The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import MeorphisTest2Vbs6wj from 'meorphis-test-2-vbs6wj';
+import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
 
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj();
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
+  apiKey: process.env['MEORPHIS_TEST_3_HP2M8U_API_KEY'], // This is the default and can be omitted
+  environment: 'environment_1', // defaults to 'production'
+});
 
 async function main() {
-  const testCaseRetrieveResponse = await meorphisTest2Vbs6wj.testCases.retrieve();
+  const statusRetrieveResponse = await meorphisTest3Hp2m8u.status.retrieve();
 
-  console.log(testCaseRetrieveResponse.testCases);
+  console.log(statusRetrieveResponse.message);
 }
 
 main();
@@ -39,13 +42,16 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import MeorphisTest2Vbs6wj from 'meorphis-test-2-vbs6wj';
+import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
 
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj();
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
+  apiKey: process.env['MEORPHIS_TEST_3_HP2M8U_API_KEY'], // This is the default and can be omitted
+  environment: 'environment_1', // defaults to 'production'
+});
 
 async function main() {
-  const testCaseRetrieveResponse: MeorphisTest2Vbs6wj.TestCaseRetrieveResponse =
-    await meorphisTest2Vbs6wj.testCases.retrieve();
+  const statusRetrieveResponse: MeorphisTest3Hp2m8u.StatusRetrieveResponse =
+    await meorphisTest3Hp2m8u.status.retrieve();
 }
 
 main();
@@ -62,8 +68,8 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const testCase = await meorphisTest2Vbs6wj.testCases.retrieve().catch((err) => {
-    if (err instanceof MeorphisTest2Vbs6wj.APIError) {
+  const statusRetrieveResponse = await meorphisTest3Hp2m8u.status.retrieve().catch((err) => {
+    if (err instanceof MeorphisTest3Hp2m8u.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
       console.log(err.headers); // {server: 'nginx', ...}
@@ -100,12 +106,12 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj({
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await meorphisTest2Vbs6wj.testCases.retrieve({
+await meorphisTest3Hp2m8u.status.retrieve({
   maxRetries: 5,
 });
 ```
@@ -117,12 +123,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj({
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await meorphisTest2Vbs6wj.testCases.retrieve({
+await meorphisTest3Hp2m8u.status.retrieve({
   timeout: 5 * 1000,
 });
 ```
@@ -141,17 +147,17 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 
 <!-- prettier-ignore -->
 ```ts
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj();
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u();
 
-const response = await meorphisTest2Vbs6wj.testCases.retrieve().asResponse();
+const response = await meorphisTest3Hp2m8u.status.retrieve().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: testCaseRetrieveResponse, response: raw } = await meorphisTest2Vbs6wj.testCases
+const { data: statusRetrieveResponse, response: raw } = await meorphisTest3Hp2m8u.status
   .retrieve()
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(testCaseRetrieveResponse.testCases);
+console.log(statusRetrieveResponse.message);
 ```
 
 ## Customizing the fetch client
@@ -160,26 +166,26 @@ By default, this library uses `node-fetch` in Node, and expects a global `fetch`
 
 If you would prefer to use a global, web-standards-compliant `fetch` function even in a Node environment,
 (for example, if you are running Node with `--experimental-fetch` or using NextJS which polyfills with `undici`),
-add the following import before your first import `from "MeorphisTest2Vbs6wj"`:
+add the following import before your first import `from "MeorphisTest3Hp2m8u"`:
 
 ```ts
 // Tell TypeScript and the package to use the global web fetch instead of node-fetch.
 // Note, despite the name, this does not add any polyfills, but expects them to be provided if needed.
-import 'meorphis-test-2-vbs6wj/shims/web';
-import MeorphisTest2Vbs6wj from 'meorphis-test-2-vbs6wj';
+import 'meorphis-test-3-hp2m8u/shims/web';
+import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
 ```
 
-To do the inverse, add `import "meorphis-test-2-vbs6wj/shims/node"` (which does import polyfills).
-This can also be useful if you are getting the wrong TypeScript types for `Response` - more details [here](https://github.com/meorphis-test/test-repo-3/tree/main/src/_shims#readme).
+To do the inverse, add `import "meorphis-test-3-hp2m8u/shims/node"` (which does import polyfills).
+This can also be useful if you are getting the wrong TypeScript types for `Response` - more details [here](https://github.com/stainless-sdks/tree/main/src/_shims#readme).
 
 You may also provide a custom `fetch` function when instantiating the client,
 which can be used to inspect or alter the `Request` or `Response` before/after each request:
 
 ```ts
 import { fetch } from 'undici'; // as one example
-import MeorphisTest2Vbs6wj from 'meorphis-test-2-vbs6wj';
+import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
 
-const client = new MeorphisTest2Vbs6wj({
+const client = new MeorphisTest3Hp2m8u({
   fetch: async (url: RequestInfo, init?: RequestInfo): Promise<Response> => {
     console.log('About to make a request', url, init);
     const response = await fetch(url, init);
@@ -204,12 +210,12 @@ import http from 'http';
 import HttpsProxyAgent from 'https-proxy-agent';
 
 // Configure the default for all requests:
-const meorphisTest2Vbs6wj = new MeorphisTest2Vbs6wj({
+const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
   httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),
 });
 
 // Override per-request:
-await meorphisTest2Vbs6wj.testCases.retrieve({
+await meorphisTest3Hp2m8u.status.retrieve({
   baseURL: 'http://localhost:8080/test-api',
   httpAgent: new http.Agent({ keepAlive: false }),
 })
@@ -225,7 +231,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/meorphis-test/test-repo-3/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/meorphis-test-3-hp2m8u-node/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
@@ -234,7 +240,7 @@ TypeScript >= 4.5 is supported.
 The following runtimes are supported:
 
 - Node.js 18 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.
-- Deno v1.28.0 or higher, using `import MeorphisTest2Vbs6wj from "npm:meorphis-test-2-vbs6wj"`.
+- Deno v1.28.0 or higher, using `import MeorphisTest3Hp2m8u from "npm:meorphis-test-3-hp2m8u"`.
 - Bun 1.0 or later.
 - Cloudflare Workers.
 - Vercel Edge Runtime.
