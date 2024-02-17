@@ -16,4 +16,8 @@ jobs:
         run: |
           bash ./bin/check-release-environment
         env:
-          NPM_TOKEN: ${{ secrets.MEORPHIS_TEST_3_HP2M8U_NPM_TOKEN || secrets.NPM_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.MEORPHIS_TEST_6_SONATYPE_USERNAME || secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.MEORPHIS_TEST_6_SONATYPE_PASSWORD || secrets.SONATYPE_PASSWORD }}
+          GPG_SIGNING_KEY_ID: ${{ secrets.MEORPHIS_TEST_6_SONATYPE_GPG_SIGNING_KEY_ID || secrets.GPG_SIGNING_KEY_ID }}
+          GPG_SIGNING_KEY: ${{ secrets.MEORPHIS_TEST_6_SONATYPE_GPG_SIGNING_KEY || secrets.GPG_SIGNING_KEY }}
+          GPG_SIGNING_PASSWORD: ${{ secrets.MEORPHIS_TEST_6_SONATYPE_GPG_SIGNING_PASSWORD || secrets.GPG_SIGNING_PASSWORD }}

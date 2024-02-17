@@ -1,7 +1,4 @@
-node_modules
-yarn-error.log
+.gradle
+.idea
+build
 codegen.log
-dist
-/deno
-/*.tgz
-.idea/

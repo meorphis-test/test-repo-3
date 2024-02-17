@@ -59,9 +59,9 @@
       "hidden": true
     }
   ],
-  "release-type": "node",
+  "release-type": "simple",
   "extra-files": [
-    "src/version.ts",
-    "README.md"
+    "README.md",
+    "build.gradle.kts"
   ]
 }

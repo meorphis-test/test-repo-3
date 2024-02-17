@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - stainless
   pull_request:
     branches:
-      - main
+      - stainless
 
 jobs:
   lint:
@@ -15,16 +15,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Node
-        uses: actions/setup-node@v3
+  
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
-          node-version: '18'
+          distribution: temurin
+          java-version: |
+            8
+            17
+          cache: gradle
 
-      - name: Install dependencies
-        run: |
-          yarn install
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - name: Check types
+      - name: Gradle build
         run: |
-          yarn build
+          ./gradlew build testClasses -x test
