@@ -1,252 +1,236 @@
-# Meorphis Test 3 Hp2m8u Node API Library
+# Meorphis Test 6 Java API Library
 
-[![NPM version](https://img.shields.io/npm/v/meorphis-test-3-hp2m8u.svg)](https://npmjs.org/package/meorphis-test-3-hp2m8u)
+<!-- x-release-please-start-version -->
 
-This library provides convenient access to the Meorphis Test 3 Hp2m8u REST API from server-side TypeScript or JavaScript.
+[![Maven Central](https://img.shields.io/maven-central/v/com.configure_me_meorphis_test_6.api/meorphis-test-6-java)](https://central.sonatype.com/artifact/com.configure_me_meorphis_test_6.api/meorphis-test-6-java/0.0.1-alpha.0)
 
-The REST API documentation can be found [on docs.meorphis-test-3-hp2m8u.com](https://docs.meorphis-test-3-hp2m8u.com). The full API of this library can be found in [api.md](api.md).
+<!-- x-release-please-end -->
 
-## Installation
+The Meorphis Test 6 Java SDK provides convenient access to the Meorphis Test 6 REST API from applications written in Java. It includes helper classes with helpful types and documentation for every request and response property.
 
-```sh
-npm install --save meorphis-test-3-hp2m8u
-# or
-yarn add meorphis-test-3-hp2m8u
+The Meorphis Test 6 Java SDK is similar to the Meorphis Test 6 Kotlin SDK but with minor differences that make it more ergonomic for use in Java, such as `Optional` instead of nullable values, `Stream` instead of `Sequence`, and `CompletableFuture` instead of suspend functions.
+
+## Documentation
+
+The REST API documentation can be found [on docs.meorphis-test-6.com](https://docs.meorphis-test-6.com). The full API of this library can be found in [api.md](api.md).
+
+---
+
+## Getting started
+
+### Install dependencies
+
+#### Gradle
+
+<!-- x-release-please-start-version -->
+
+```kotlin
+implementation("com.configure_me_meorphis_test_6.api:meorphis-test-6-java:0.0.1-alpha.0")
 ```
 
-## Usage
+#### Maven
 
-The full API of this library can be found in [api.md](api.md).
+```xml
+<dependency>
+    <groupId>com.configure_me_meorphis_test_6.api</groupId>
+    <artifactId>meorphis-test-6-java</artifactId>
+    <version>0.0.1-alpha.0</version>
+</dependency>
+```
 
-<!-- prettier-ignore -->
-```js
-import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
+<!-- x-release-please-end -->
 
-const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
-  apiKey: process.env['MEORPHIS_TEST_3_HP2M8U_API_KEY'], // This is the default and can be omitted
-  environment: 'environment_1', // defaults to 'production'
-});
+### Configure the client
 
-async function main() {
-  const statusRetrieveResponse = await meorphisTest3Hp2m8u.status.retrieve();
+Use `MeorphisTest6OkHttpClient.builder()` to configure the client. At a minimum you need to set `.apiKey()`:
 
-  console.log(statusRetrieveResponse.message);
+```java
+import com.configure_me_meorphis_test_6.api.client.MeorphisTest6Client;
+import com.configure_me_meorphis_test_6.api.client.okhttp.MeorphisTest6OkHttpClient;
+
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.builder()
+    .apiKey("My API Key")
+    .build();
+```
+
+Alternately, set the environment with `MEORPHIS_TEST_6_API_KEY`, and use `MeorphisTest6OkHttpClient.fromEnv()` to read from the environment.
+
+```java
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.fromEnv();
+
+// Note: you can also call fromEnv() from the client builder, for example if you need to set additional properties
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.builder()
+    .fromEnv()
+    // ... set properties on the builder
+    .build();
+```
+
+| Property | Environment variable      | Required | Default value |
+| -------- | ------------------------- | -------- | ------------- |
+| apiKey   | `MEORPHIS_TEST_6_API_KEY` | true     | —             |
+
+Read the documentation for more configuration options.
+
+---
+
+### Example: creating a resource
+
+To create a new account, first use the `AccountRetrieveParams` builder to specify attributes,
+then pass that to the `retrieve` method of the `accounts` service.
+
+```java
+import com.configure_me_meorphis_test_6.api.models.AccountRetrieveParams;
+import com.configure_me_meorphis_test_6.api.models.AccountRetrieveResponse;
+
+AccountRetrieveParams params = AccountRetrieveParams.builder().build();
+AccountRetrieveResponse accountRetrieveResponse = client.accounts().retrieve(params);
+```
+
+---
+
+## Requests
+
+### Parameters and bodies
+
+To make a request to the Meorphis Test 6 API, you generally build an instance of the appropriate `Params` class.
+
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `AccountRetrieveParams.builder()` to pass to
+the `retrieve` method of the `accounts` service.
+
+Sometimes, the API may support other properties that are not yet supported in the Java SDK types. In that case,
+you can attach them using the `putAdditionalProperty` method.
+
+```java
+AccountRetrieveParams params = AccountRetrieveParams.builder()
+    // ... normal properties
+    .putAdditionalProperty("secret_param", "4242")
+    .build();
+```
+
+## Responses
+
+### Response validation
+
+When receiving a response, the Meorphis Test 6 Java SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Java type. If you directly access the mistaken property, the SDK will throw an unchecked `MeorphisTest6InvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
+
+```java
+AccountRetrieveResponse accountRetrieveResponse = client.accounts().retrieve().validate();
+```
+
+### Response properties as JSON
+
+In rare cases, you may want to access the underlying JSON value for a response property rather than using the typed version provided by
+this SDK. Each model property has a corresponding JSON version, with an underscore before the method name, which returns a `JsonField` value.
+
+```java
+JsonField field = responseObj._field();
+
+if (field.isMissing()) {
+  // Value was not specified in the JSON response
+} else if (field.isNull()) {
+  // Value was provided as a literal null
+} else {
+  // See if value was provided as a string
+  Optional<String> jsonString = field.asString();
+
+  // If the value given by the API did not match the shape that the SDK expects
+  // you can deserialise into a custom type
+  MyClass myObj = responseObj._field().asUnknown().orElseThrow().convert(MyClass.class);
 }
-
-main();
 ```
 
-### Request & Response types
+### Additional model properties
 
-This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:
+Sometimes, the server response may include additional properties that are not yet available in this library's types. You can access them using the model's `_additionalProperties` method:
 
-<!-- prettier-ignore -->
-```ts
-import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
-
-const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
-  apiKey: process.env['MEORPHIS_TEST_3_HP2M8U_API_KEY'], // This is the default and can be omitted
-  environment: 'environment_1', // defaults to 'production'
-});
-
-async function main() {
-  const statusRetrieveResponse: MeorphisTest3Hp2m8u.StatusRetrieveResponse =
-    await meorphisTest3Hp2m8u.status.retrieve();
-}
-
-main();
+```java
+JsonValue secret = accountRetrieveResponse._additionalProperties().get("secret_field");
 ```
 
-Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
+---
 
-## Handling errors
+---
 
-When the library is unable to connect to the API,
-or if the API returns a non-success status code (i.e., 4xx or 5xx response),
-a subclass of `APIError` will be thrown:
+## Error handling
 
-<!-- prettier-ignore -->
-```ts
-async function main() {
-  const statusRetrieveResponse = await meorphisTest3Hp2m8u.status.retrieve().catch((err) => {
-    if (err instanceof MeorphisTest3Hp2m8u.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
-}
+This library throws exceptions in a single hierarchy for easy handling:
 
-main();
-```
+- **`MeorphisTest6Exception`** - Base exception for all exceptions
 
-Error codes are as followed:
+  - **`MeorphisTest6ServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
 
-| Status Code | Error Type                 |
-| ----------- | -------------------------- |
-| 400         | `BadRequestError`          |
-| 401         | `AuthenticationError`      |
-| 403         | `PermissionDeniedError`    |
-| 404         | `NotFoundError`            |
-| 422         | `UnprocessableEntityError` |
-| 429         | `RateLimitError`           |
-| >=500       | `InternalServerError`      |
-| N/A         | `APIConnectionError`       |
+    | 400    | BadRequestException           |
+    | ------ | ----------------------------- |
+    | 401    | AuthenticationException       |
+    | 403    | PermissionDeniedException     |
+    | 404    | NotFoundException             |
+    | 422    | UnprocessableEntityException  |
+    | 429    | RateLimitException            |
+    | 5xx    | InternalServerException       |
+    | others | UnexpectedStatusCodeException |
+
+  - **`MeorphisTest6IoException`** - I/O networking errors
+  - **`MeorphisTest6InvalidDataException`** - any other exceptions on the client side, e.g.:
+    - We failed to serialize the request body
+    - We failed to parse the response body (has access to response code and body)
+
+## Network options
 
 ### Retries
 
-Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
-Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
-429 Rate Limit, and >=500 Internal errors will all be retried by default.
+Requests that experience certain errors are automatically retried 2 times by default, with a short exponential backoff. Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, and >=500 Internal errors will all be retried by default.
+You can provide a `maxRetries` on the client builder to configure this:
 
-You can use the `maxRetries` option to configure or disable this:
-
-<!-- prettier-ignore -->
-```js
-// Configure the default for all requests:
-const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
-  maxRetries: 0, // default is 2
-});
-
-// Or, configure per-request:
-await meorphisTest3Hp2m8u.status.retrieve({
-  maxRetries: 5,
-});
+```java
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.builder()
+    .fromEnv()
+    .maxRetries(4)
+    .build();
 ```
 
 ### Timeouts
 
-Requests time out after 1 minute by default. You can configure this with a `timeout` option:
+Requests time out after 1 minute by default. You can configure this on the client builder:
 
-<!-- prettier-ignore -->
-```ts
-// Configure the default for all requests:
-const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
-  timeout: 20 * 1000, // 20 seconds (default is 1 minute)
-});
-
-// Override per-request:
-await meorphisTest3Hp2m8u.status.retrieve({
-  timeout: 5 * 1000,
-});
+```java
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.builder()
+    .fromEnv()
+    .timeout(Duration.ofSeconds(30))
+    .build();
 ```
 
-On timeout, an `APIConnectionTimeoutError` is thrown.
+### Proxies
 
-Note that requests which time out will be [retried twice by default](#retries).
+Requests can be routed through a proxy. You can configure this on the client builder:
 
-## Advanced Usage
-
-### Accessing raw Response data (e.g., headers)
-
-The "raw" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.
-
-You can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.
-
-<!-- prettier-ignore -->
-```ts
-const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u();
-
-const response = await meorphisTest3Hp2m8u.status.retrieve().asResponse();
-console.log(response.headers.get('X-My-Header'));
-console.log(response.statusText); // access the underlying Response object
-
-const { data: statusRetrieveResponse, response: raw } = await meorphisTest3Hp2m8u.status
-  .retrieve()
-  .withResponse();
-console.log(raw.headers.get('X-My-Header'));
-console.log(statusRetrieveResponse.message);
+```java
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.builder()
+    .fromEnv()
+    .proxy(new Proxy(
+        Type.HTTP,
+        new InetSocketAddress("proxy.com", 8080)
+    ))
+    .build();
 ```
 
-## Customizing the fetch client
+### Environments
 
-By default, this library uses `node-fetch` in Node, and expects a global `fetch` function in other environments.
+Requests are made to the production environment by default. You can connect to other environments, like `environment_1`, via the client builder:
 
-If you would prefer to use a global, web-standards-compliant `fetch` function even in a Node environment,
-(for example, if you are running Node with `--experimental-fetch` or using NextJS which polyfills with `undici`),
-add the following import before your first import `from "MeorphisTest3Hp2m8u"`:
-
-```ts
-// Tell TypeScript and the package to use the global web fetch instead of node-fetch.
-// Note, despite the name, this does not add any polyfills, but expects them to be provided if needed.
-import 'meorphis-test-3-hp2m8u/shims/web';
-import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
-```
-
-To do the inverse, add `import "meorphis-test-3-hp2m8u/shims/node"` (which does import polyfills).
-This can also be useful if you are getting the wrong TypeScript types for `Response` - more details [here](https://github.com/meorphis-test/test-repo-3/tree/stainless/src/_shims#readme).
-
-You may also provide a custom `fetch` function when instantiating the client,
-which can be used to inspect or alter the `Request` or `Response` before/after each request:
-
-```ts
-import { fetch } from 'undici'; // as one example
-import MeorphisTest3Hp2m8u from 'meorphis-test-3-hp2m8u';
-
-const client = new MeorphisTest3Hp2m8u({
-  fetch: async (url: RequestInfo, init?: RequestInfo): Promise<Response> => {
-    console.log('About to make a request', url, init);
-    const response = await fetch(url, init);
-    console.log('Got response', response);
-    return response;
-  },
-});
-```
-
-Note that if given a `DEBUG=true` environment variable, this library will log all requests and responses automatically.
-This is intended for debugging purposes only and may change in the future without notice.
-
-## Configuring an HTTP(S) Agent (e.g., for proxies)
-
-By default, this library uses a stable agent for all http/https requests to reuse TCP connections, eliminating many TCP & TLS handshakes and shaving around 100ms off most requests.
-
-If you would like to disable or customize this behavior, for example to use the API behind a proxy, you can pass an `httpAgent` which is used for all requests (be they http or https), for example:
-
-<!-- prettier-ignore -->
-```ts
-import http from 'http';
-import HttpsProxyAgent from 'https-proxy-agent';
-
-// Configure the default for all requests:
-const meorphisTest3Hp2m8u = new MeorphisTest3Hp2m8u({
-  httpAgent: new HttpsProxyAgent(process.env.PROXY_URL),
-});
-
-// Override per-request:
-await meorphisTest3Hp2m8u.status.retrieve({
-  baseURL: 'http://localhost:8080/test-api',
-  httpAgent: new http.Agent({ keepAlive: false }),
-})
+```java
+MeorphisTest6Client client = MeorphisTest6OkHttpClient.builder()
+    .fromEnv()
+    .environment1()
+    .build();
 ```
 
 ## Semantic Versioning
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 
-1. Changes that only affect static types, without breaking runtime behavior.
-2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals)_.
-3. Changes that we do not expect to impact the vast majority of users in practice.
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals)_.
+2. Changes that we do not expect to impact the vast majority of users in practice.
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
 We are keen for your feedback; please open an [issue](https://www.github.com/meorphis-test/test-repo-3/issues) with questions, bugs, or suggestions.
-
-## Requirements
-
-TypeScript >= 4.5 is supported.
-
-The following runtimes are supported:
-
-- Node.js 18 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.
-- Deno v1.28.0 or higher, using `import MeorphisTest3Hp2m8u from "npm:meorphis-test-3-hp2m8u"`.
-- Bun 1.0 or later.
-- Cloudflare Workers.
-- Vercel Edge Runtime.
-- Jest 28 or greater with the `"node"` environment (`"jsdom"` is not supported at this time).
-- Nitro v2.6 or greater.
-
-Note that React Native is not supported at this time.
-
-If you are interested in other runtime environments, please open or upvote an issue on GitHub.
